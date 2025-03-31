@@ -1,0 +1,149 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Analytics - Financial Fraud Detection System</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/styles.css') }}">
+</head>
+<body>
+    <div class="container">
+        <header class="dashboard-header">
+            <div class="logo">
+                <h1>Fraud Detection System</h1>
+            </div>
+            <div class="user-info">
+                <span>Welcome, {{ session.username }}</span>
+                <a href="{{ url_for('logout') }}" class="btn btn-small">Logout</a>
+            </div>
+        </header>
+        
+        <div class="dashboard-container">
+            <aside class="sidebar">
+                <nav>
+                    <ul>
+                        <li><a href="{{ url_for('dashboard') }}">Transactions</a></li>
+                        <li><a href="{{ url_for('dashboard') }}#admin-panel">Admin Panel</a></li>
+                        <li class="active"><a href="{{ url_for('analytics') }}">Analytics</a></li>
+                    </ul>
+                </nav>
+            </aside>
+            
+            <main class="dashboard-content">
+                <section class="dashboard-section active">
+                    <div class="section-header">
+                        <h2>Fraud Analytics</h2>
+                    </div>
+                    
+                    {% if error %}
+                    <div class="alert alert-error">{{ error }}</div>
+                    {% else %}
+                    
+                    <div class="analytics-overview">
+                        <div class="stat-card">
+                            <h3>Total Transactions</h3>
+                            <div class="stat-value">{{ stats.total_transactions }}</div>
+                        </div>
+                        <div class="stat-card fraud">
+                            <h3>Fraudulent Transactions</h3>
+                            <div class="stat-value">{{ stats.fraud_transactions }}</div>
+                        </div>
+                        <div class="stat-card">
+                            <h3>Fraud Percentage</h3>
+                            <div class="stat-value">{{ stats.fraud_percentage }}%</div>
+                        </div>
+                    </div>
+                    
+                    <div class="analytics-grid">
+                        <div class="analytics-card">
+                            <h3>Top Merchants with Fraud</h3>
+                            <div class="analytics-content">
+                                {% if top_fraud_merchants %}
+                                <table class="analytics-table">
+                                    <thead>
+                                        <tr>
+                                            <th>Merchant</th>
+                                            <th>Fraud Count</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        {% for merchant in top_fraud_merchants %}
+                                        <tr>
+                                            <td>{{ merchant.merchant }}</td>
+                                            <td>{{ merchant.count }}</td>
+                                        </tr>
+                                        {% endfor %}
+                                    </tbody>
+                                </table>
+                                {% else %}
+                                <p class="no-data">No fraud data available</p>
+                                {% endif %}
+                            </div>
+                        </div>
+                        
+                        <div class="analytics-card">
+                            <h3>Fraud by Category</h3>
+                            <div class="analytics-content">
+                                {% if fraud_by_category %}
+                                <table class="analytics-table">
+                                    <thead>
+                                        <tr>
+                                            <th>Category</th>
+                                            <th>Fraud Count</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        {% for category in fraud_by_category %}
+                                        <tr>
+                                            <td>{{ category.category }}</td>
+                                            <td>{{ category.count }}</td>
+                                        </tr>
+                                        {% endfor %}
+                                    </tbody>
+                                </table>
+                                {% else %}
+                                <p class="no-data">No fraud data available</p>
+                                {% endif %}
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <div class="analytics-card full-width">
+                        <h3>Fraud Detection Insights</h3>
+                        <div class="analytics-content">
+                            <div class="insights-container">
+                                <div class="insight-item">
+                                    <h4>Pattern Recognition</h4>
+                                    <p>The AI model has identified several common patterns in fraudulent transactions:</p>
+                                    <ul>
+                                        <li>Unusual transaction times (late night or early morning)</li>
+                                        <li>Transactions from unusual locations</li>
+                                        <li>Unusually high transaction amounts</li>
+                                        <li>Multiple transactions in quick succession</li>
+                                    </ul>
+                                </div>
+                                
+                                <div class="insight-item">
+                                    <h4>Recommendations</h4>
+                                    <p>Based on the current fraud patterns, consider implementing:</p>
+                                    <ul>
+                                        <li>Enhanced verification for transactions over $1,000</li>
+                                        <li>Location-based authentication for unusual locations</li>
+                                        <li>Time-based risk scoring for off-hours transactions</li>
+                                        <li>Category-specific risk thresholds</li>
+                                    </ul>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    {% endif %}
+                </section>
+            </main>
+        </div>
+        
+        <footer>
+            <p>&copy; 2025 Financial Fraud Detection System</p>
+        </footer>
+    </div>
+</body>
+</html>

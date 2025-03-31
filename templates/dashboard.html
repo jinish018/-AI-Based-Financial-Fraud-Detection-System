@@ -1,0 +1,185 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Dashboard - Financial Fraud Detection System</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/styles.css') }}">
+</head>
+<body>
+    <div class="container">
+        <header class="dashboard-header">
+            <div class="logo">
+                <h1>Fraud Detection System</h1>
+            </div>
+            <div class="user-info">
+                <span>Welcome, {{ username }}</span>
+                <a href="{{ url_for('logout') }}" class="btn btn-small">Logout</a>
+            </div>
+        </header>
+        
+        <div class="dashboard-container">
+            <aside class="sidebar">
+                <nav>
+                    <ul>
+                        <li class="active"><a href="#" data-section="transactions">Transactions</a></li>
+                        {% if is_admin %}
+                        <li><a href="#" data-section="admin-panel">Admin Panel</a></li>
+                        <li><a href="{{ url_for('analytics') }}">Analytics</a></li>
+                        {% endif %}
+                    </ul>
+                </nav>
+            </aside>
+            
+            <main class="dashboard-content">
+                <section id="transactions" class="dashboard-section active">
+                    <div class="section-header">
+                        <h2>Transactions</h2>
+                        <button id="add-transaction-btn" class="btn btn-primary">Add New Transaction</button>
+                    </div>
+                    
+                    <div id="transaction-form-container" class="hidden">
+                        <div class="card">
+                            <h3>New Transaction</h3>
+                            <form id="transaction-form">
+                                <div class="form-row">
+                                    <div class="form-group">
+                                        <label for="amount">Amount ($)</label>
+                                        <input type="number" id="amount" name="amount" step="0.01" required>
+                                    </div>
+                                    <div class="form-group">
+                                        <label for="merchant">Merchant</label>
+                                        <input type="text" id="merchant" name="merchant" required>
+                                    </div>
+                                </div>
+                                <div class="form-row">
+                                    <div class="form-group">
+                                        <label for="category">Category</label>
+                                        <select id="category" name="category" required>
+                                            <option value="">Select Category</option>
+                                            <option value="Retail">Retail</option>
+                                            <option value="Food">Food & Dining</option>
+                                            <option value="Travel">Travel</option>
+                                            <option value="Entertainment">Entertainment</option>
+                                            <option value="Services">Services</option>
+                                            <option value="Technology">Technology</option>
+                                            <option value="Healthcare">Healthcare</option>
+                                            <option value="Other">Other</option>
+                                        </select>
+                                    </div>
+                                    <div class="form-group">
+                                        <label for="card_type">Card Type</label>
+                                        <select id="card_type" name="card_type" required>
+                                            <option value="">Select Card Type</option>
+                                            <option value="Visa"></option>
+                                            <option value="Mastercard">Mastercard</option>
+                                            <option value="Amex">American Express</option>
+                                            <option value="Discover">Discover</option>
+                                            <option value="Discover">Platinum</option>
+                                        </select>
+                                    </div>
+                                </div>
+                                <div class="form-group">
+                                    <label for="location">Location</label>
+                                    <input type="text" id="location" name="location" required>
+                                </div>
+                                <div class="form-group">
+                                    <label for="description">Description</label>
+                                    <textarea id="description" name="description" rows="2"></textarea>
+                                </div>
+                                <div class="form-actions">
+                                    <button type="button" id="cancel-transaction" class="btn btn-secondary">Cancel</button>
+                                    <button type="submit" class="btn btn-primary">Submit Transaction</button>
+                                </div>
+                            </form>
+                        </div>
+                    </div>
+                    
+                    <div class="transaction-list-container">
+                        <div class="transaction-filters">
+                            <div class="search-box">
+                                <input type="text" id="search-transactions" placeholder="Search transactions...">
+                            </div>
+                            <div class="filter-options">
+                                <select id="filter-fraud">
+                                    <option value="all">All Transactions</option>
+                                    <option value="fraud">Fraudulent Only</option>
+                                    <option value="legitimate">Legitimate Only</option>
+                                </select>
+                            </div>
+                        </div>
+                        
+                        <div id="transactions-table-container">
+                            <table id="transactions-table">
+                                <thead>
+                                    <tr>
+                                        <th>Date/Time</th>
+                                        <th>Amount</th>
+                                        <th>Merchant</th>
+                                        <th>Category</th>
+                                        <th>Location</th>
+                                        <th>Status</th>
+                                        <th>Actions</th>
+                                    </tr>
+                                </thead>
+                                <tbody id="transactions-body">
+                                    <!-- Transactions will be loaded here -->
+                                    <tr>
+                                        <td colspan="7" class="loading-message">Loading transactions...</td>
+                                    </tr>
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                </section>
+                
+                {% if is_admin %}
+                <section id="admin-panel" class="dashboard-section">
+                    <div class="section-header">
+                        <h2>Admin Panel</h2>
+                    </div>
+                    
+                    <div class="admin-stats">
+                        <div class="stat-card" id="total-transactions">
+                            <h3>Total Transactions</h3>
+                            <div class="stat-value">--</div>
+                        </div>
+                        <div class="stat-card" id="fraud-transactions">
+                            <h3>Fraudulent Transactions</h3>
+                            <div class="stat-value">--</div>
+                        </div>
+                        <div class="stat-card" id="fraud-percentage">
+                            <h3>Fraud Percentage</h3>
+                            <div class="stat-value">--</div>
+                        </div>
+                    </div>
+                    
+                    <div class="admin-charts">
+                        <div class="chart-container">
+                            <h3>Fraud Detection Overview</h3>
+                            <div class="chart" id="fraud-chart">
+                                <div class="placeholder-chart">Chart will be displayed here</div>
+                            </div>
+                        </div>
+                    </div>
+                </section>
+                {% endif %}
+                
+                <div id="transaction-details-modal" class="modal">
+                    <div class="modal-content">
+                        <span class="close-modal">&times;</span>
+                        <h2>Transaction Details</h2>
+                        <div id="transaction-details-content"></div>
+                    </div>
+                </div>
+            </main>
+        </div>
+        
+        <footer>
+            <p>&copy; 2025 Financial Fraud Detection System</p>
+        </footer>
+    </div>
+    
+    <script src="{{ url_for('static', filename='js/script.js') }}"></script>
+</body>
+</html>

@@ -1,0 +1,74 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Financial Fraud Detection System</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/styles.css') }}">
+</head>
+<body>
+    <div class="container">
+        <header>
+            <h1>Financial Fraud Detection System</h1>
+            <p>AI-powered real-time transaction monitoring</p>
+        </header>
+        
+        <main>
+            <section class="login-section">
+                <div class="card">
+                    <h2>Login</h2>
+                    {% if error %}
+                    <div class="alert alert-error">{{ error }}</div>
+                    {% endif %}
+                    <form action="{{ url_for('login') }}" method="post">
+                        <div class="form-group">
+                            <label for="username">Username</label>
+                            <input type="text" id="username" name="username" required>
+                        </div>
+                        <div class="form-group">
+                            <label for="password">Password</label>
+                            <input type="password" id="password" name="password" required>
+                        </div>
+                        <button type="submit" class="btn btn-primary">Login</button>
+                    </form>
+                    <!-- <div class="login-info">
+                        <p>Demo credentials:</p>
+                        <p>Username: admin</p>
+                        <p>Password: admin123</p>
+                    </div> -->
+                </div>
+            </section>
+            
+            <section class="features-section">
+                <h2>System Features</h2>
+                <div class="features-grid">
+                    <div class="feature-card">
+                        <div class="feature-icon">🔍</div>
+                        <h3>Real-time Monitoring</h3>
+                        <p>Monitor and analyze financial transactions as they occur</p>
+                    </div>
+                    <div class="feature-card">
+                        <div class="feature-icon">🤖</div>
+                        <h3>AI-powered Detection</h3>
+                        <p>Advanced machine learning algorithms to detect suspicious patterns</p>
+                    </div>
+                    <div class="feature-card">
+                        <div class="feature-icon">📊</div>
+                        <h3>Detailed Analytics</h3>
+                        <p>Comprehensive insights and actionable alerts</p>
+                    </div>
+                    <div class="feature-card">
+                        <div class="feature-icon">🔒</div>
+                        <h3>Regulatory Compliance</h3>
+                        <p>Ensure compliance with financial laws and regulations</p>
+                    </div>
+                </div>
+            </section>
+        </main>
+        
+        <footer>
+            <p>&copy; 2025 Financial Fraud Detection System</p>
+        </footer>
+    </div>
+</body>
+</html>
